@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Mail, Lock, Loader2 } from "lucide-react";
 
 import { loginUser } from "../api/auth_api";
+import { useAuth } from "../../../context/AuthContext";
 
 
 export default function LoginPage() {
@@ -15,7 +16,9 @@ export default function LoginPage() {
 
   const [serverError, setServerError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const onSubmit = async (data) => {
     try {
@@ -23,7 +26,11 @@ export default function LoginPage() {
       setServerError("");
 
       const response = await loginUser(data);
-      if (response.success) navigate("/dashboard");
+
+      if (response.success) {
+        login(response.data);
+        navigate("/dashboard");
+      }
     } catch (error) {
       setServerError(error.response?.data?.message || "Failed to login");
     } finally {
