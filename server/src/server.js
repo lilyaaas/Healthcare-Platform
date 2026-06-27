@@ -1,6 +1,9 @@
 require("dotenv").config();
 const app = require("./app");
+const connectDB = require("./config/db");
 
-app.listen(process.env.PORT, () => {
-  console.log("Healthcare Backend running");
+connectDB().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log("Healthcare Backend running");
+  });
 });
